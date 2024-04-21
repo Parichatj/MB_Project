@@ -19,210 +19,126 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class Fanfic extends StatelessWidget {
-  const Fanfic({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        child: SizedBox(
-          height: 90,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildNavItem(context, 'Home', Icons.home),
-              _buildNavItem(context, 'Fanfic', Icons.star),
-              _buildNavItem(context, 'Reading', Icons.book),
-              _buildNavItem(context, 'Writing', Icons.create),
-              _buildNavItem(context, 'Activity', Icons.notifications),
-            ],
-          ),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("ทั้งหมด   เเชท   บรรยาย"),
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: Icon(Icons.account_circle),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+          ],
+        ),
+        backgroundColor: Colors.purple,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              height: 180,
+              child: FanFicPage(), // เรียกใช้ FanFicPage
+            ),
+            SizedBox(height: 20),
+            ListTile(
+              title: Text('อ่านต่อ', style: TextStyle(fontWeight: FontWeight.bold)),
+              trailing: Icon(Icons.arrow_forward),
+              onTap: () {},
+            ),
+            SizedBox(height: 20),
+            NovelBox(imageUrl: 'https://example.com/novel.jpg', title: 'ชื่อนิยาย'),
+          ],
         ),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: RadialGradient(
-            colors: [Colors.white, Colors.blueAccent],
-            radius: 1.5,
-            center: Alignment.center,
-          ),
-        ),
-        padding: const EdgeInsets.only(left: 18.0, right: 18.0),
-        child: Column(
-          children: [
-            SafeArea(
-              child: Row(
-                children: [
-                  Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      color: Color(0xff004cc3),
-                      image: DecorationImage(
-                        image: AssetImage('assets/disney.jpg'),
-                        fit: BoxFit.cover, // ระบุ fit ของรูปภาพ
-                      ),
-                      borderRadius: BorderRadius.circular(80),
-                    ),
-                  ),
-                   SizedBox(
-                    width: 15,
-                  ),
-                  const Column( 
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('นิยาย',style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18
-                      ),),
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 35,color: Color(0xff004cc3),
-                      ),
-                    
-                     
-                    ],
-                  ),
-       
-                  Spacer(),
-                    Badge(
-                        backgroundColor: Color(0xffFF7801),
-                        label: Text('2'),
-                        child: 
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: Offset(0, 1),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(50),
-                            color: Colors.white,
-                          ),
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.black38,
-
-                          )
-                          
-                         
-                        )
-                    )
-                ], 
-              ), 
-            ), 
-            SizedBox(height: 20,),
-            Container(
-              width: 420,
-              height: 170,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage('assets/disney.jpg')
-                  )
-                ),
-              ),
-
-              
-              
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('อันดับนิยาย',style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18
-                      ),),
-                   Padding(
-                    padding: EdgeInsets.only(top: 18.0,right: 18),
-                    child: Image(
-                      height: 90,
-                      image: AssetImage('assets/disney.jpg')
-                    ),
-                    ),
-                    Padding(
-                    padding: EdgeInsets.only(top: 18.0,),
-                    child: Image(
-                      height: 90,
-                      image: AssetImage('assets/disney.jpg')
-                    ),
-                    ),
-                    Padding(
-                    padding: EdgeInsets.only(top: 18.0,),
-                    child: Image(
-                      height: 90,
-                      image: AssetImage('assets/disney.jpg')
-                    ),
-                    ),
-                    
-                ],
-              ),
-
-               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // ปรับขนาดระยะห่างภายในตามต้องการ
-                    decoration: BoxDecoration(
-                    color: Colors.white, // สีของพื้นหลังภายในกรอบ
-                    border: Border.all(color: Colors.blue, width: 2), // สีและความหนาของกรอบ
-                    borderRadius: BorderRadius.circular(5), // ความโค้งของมุมกรอบ
-               ),
-                child: Text('นิยายรัก',
-                style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                ),
-               ),
-              ),
-                   Padding(
-                    padding: EdgeInsets.only(top: 18.0,right: 18),
-                    child: Image(
-                      height: 90,
-                      image: AssetImage('assets/disney.jpg')
-                    ),
-                    ),
-                    Padding(
-                    padding: EdgeInsets.only(top: 18.0,),
-                    child: Image(
-                      height: 90,
-                      image: AssetImage('assets/disney.jpg')
-                    ),
-                    ),
-                    Padding(
-                    padding: EdgeInsets.only(top: 18.0,),
-                    child: Image(
-                      height: 90,
-                      image: AssetImage('assets/disney.jpg')
-                    ),
-                    ),
-                    
-                ],
-              )
-             
-            
-          ], 
-        ), 
-      ), 
-    ); 
+    );
   }
 }
 
-  Widget _buildNavItem(BuildContext context, String label, IconData icon) {
-    return IconButton(
-      icon: Icon(icon),
-      onPressed: () {
-        // Here you can add navigation logic
-        // For instance:
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => YourNewPage()));
-        print('$label tapped');
+class FanFicPage extends StatefulWidget { // เปลี่ยน FanFicPage เป็น StatefulWidget
+  @override
+  _FanFicPageState createState() => _FanFicPageState();
+}
+
+class _FanFicPageState extends State<FanFicPage> {
+  final PageController _pageController = PageController(viewportFraction: 0.8); // ประกาศ PageController
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector( // ใช้ GestureDetector สำหรับการเลื่อน
+      onHorizontalDragUpdate: (details) {
+        if (details.delta.dx < 0) { // เลื่อนไปทางซ้าย
+          _pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.ease);
+        } else if (details.delta.dx > 0) { // เลื่อนไปทางขวา
+          _pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.ease);
+        }
       },
-      tooltip: label,
+      child: PageView.builder(
+        controller: _pageController,
+        itemCount: 5,
+        itemBuilder: (_, i) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.black, width: 2), // เพิ่มกรอบรอบรูปภาพ
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.asset(
+                  "assets/cosmic.png",
+                  fit: BoxFit.fitWidth, // ปรับขนาดรูปภาพให้เต็มความกว้างของ Container
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
+}
+
+class NovelBox extends StatelessWidget {
+  final String imageUrl;
+  final String title;
+
+  const NovelBox({Key? key, required this.imageUrl, required this.title}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 120,
+      margin: EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.grey[300],
+      ),
+      child: Row(
+        children: [
+          Image.network(
+            imageUrl,
+            height: 100,
+            width: 100,
+          ),
+          SizedBox(width: 8.0),
+          Expanded(
+            child: Text(title, style: TextStyle(fontSize: 18)),
+          ),
+        ],
+      ),
+    );
+  }
+}
