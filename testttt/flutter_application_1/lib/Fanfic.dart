@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
-
-
 void main() {
   runApp(MyApp());
 }
@@ -13,13 +11,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My App',
+      title: 'Fanfic',
       home: Fanfic(),
     );
   }
 }
 
-class Fanfic extends StatelessWidget {
+class Fanfic extends StatefulWidget {
+  @override
+  _FanficState createState() => _FanficState();
+}
+
+class _FanficState extends State<Fanfic> {
+  final List<String> categories = ['เพื่อนสนิท', 'โรงเรียน', 'เเอบรัก', 'มหาวิทยาลัย', 'omegaverse'];
+  List<bool> isSelected = [false, false, false, false, false]; // เก็บสถานะการเลือกของแต่ละหัวข้อ
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +44,12 @@ class Fanfic extends StatelessWidget {
                   icon: Icon(Icons.account_circle),
                   onPressed: () {},
                 ),
+                IconButton(
+                  icon: Icon(Icons.book),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/reading');
+                  },
+                ),
               ],
             ),
           ],
@@ -50,7 +62,7 @@ class Fanfic extends StatelessWidget {
           children: [
             Container(
               height: 180,
-              child: FanFicPage(), // เรียกใช้ FanFicPage
+              child: FanFicPage(),
             ),
             SizedBox(height: 20),
             ListTile(
@@ -59,29 +71,94 @@ class Fanfic extends StatelessWidget {
               onTap: () {},
             ),
             SizedBox(height: 20),
-            NovelBox(imageUrl: 'https://example.com/novel.jpg', title: 'ชื่อนิยาย'),
+            NovelBoxList(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'ฟิค Boy love',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: ToggleButtons(
+                children: List.generate(
+                  categories.length,
+                  (index) => Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Text(categories[index]),
+                  ),
+                ),
+                isSelected: isSelected,
+                onPressed: (int index) {
+                  setState(() {
+                    isSelected = List.generate(categories.length, (i) => i == index);
+                  });
+                },
+                borderRadius: BorderRadius.circular(8),
+                selectedColor: Colors.white,
+                fillColor: Colors.blue,
+                splashColor: Colors.blueAccent,
+                renderBorder: false,
+              ),
+            ),
+            SizedBox(height: 20),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: SizedBox(
+          height: 90,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildNavItem(context, 'Home', Icons.home, '/'),
+              _buildNavItem(context, 'Fanfic', Icons.star, '/fanfic'),
+              _buildNavItem(context, 'Reading', Icons.book, '/reading'),
+              _buildNavItem(context, 'Writing', Icons.create, '/writing'),
+              _buildNavItem(context, 'Activity', Icons.notifications, '/activity'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(BuildContext context, String title, IconData icon, String routeName) {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, routeName);
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon),
+          SizedBox(height: 4),
+          Text(title),
+        ],
       ),
     );
   }
 }
 
-class FanFicPage extends StatefulWidget { // เปลี่ยน FanFicPage เป็น StatefulWidget
+class FanFicPage extends StatefulWidget {
   @override
   _FanFicPageState createState() => _FanFicPageState();
 }
 
 class _FanFicPageState extends State<FanFicPage> {
-  final PageController _pageController = PageController(viewportFraction: 0.8); // ประกาศ PageController
+  final PageController _pageController = PageController(viewportFraction: 0.8);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector( // ใช้ GestureDetector สำหรับการเลื่อน
+    return GestureDetector(
       onHorizontalDragUpdate: (details) {
-        if (details.delta.dx < 0) { // เลื่อนไปทางซ้าย
+        if (details.delta.dx < 0) {
           _pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.ease);
-        } else if (details.delta.dx > 0) { // เลื่อนไปทางขวา
+        } else if (details.delta.dx > 0) {
           _pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.ease);
         }
       },
@@ -94,18 +171,53 @@ class _FanFicPageState extends State<FanFicPage> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: Colors.black, width: 2), // เพิ่มกรอบรอบรูปภาพ
+                border: Border.all(color: Colors.black, width: 2),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Image.asset(
                   "assets/cosmic.png",
-                  fit: BoxFit.fitWidth, // ปรับขนาดรูปภาพให้เต็มความกว้างของ Container
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class NovelBoxList extends StatefulWidget {
+  @override
+  _NovelBoxListState createState() => _NovelBoxListState();
+}
+
+class _NovelBoxListState extends State<NovelBoxList> {
+  final PageController _pageController = PageController(viewportFraction: 0.8);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onHorizontalDragUpdate: (details) {
+        if (details.delta.dx < 0) {
+          _pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.ease);
+        } else if (details.delta.dx > 0) {
+          _pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.ease);
+        }
+      },
+      child: Container(
+        height: 120,
+        child: PageView.builder(
+          controller: _pageController,
+          itemCount: 5,
+          itemBuilder: (_, index) {
+            return NovelBox(
+              imageUrl: 'https://example.com/novel_$index.jpg',
+              title: 'ชื่อนิยาย $index',
+            );
+          },
+        ),
       ),
     );
   }
@@ -120,18 +232,21 @@ class NovelBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
-      margin: EdgeInsets.all(8.0),
+      margin: EdgeInsets.symmetric(horizontal: 8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         color: Colors.grey[300],
       ),
       child: Row(
         children: [
-          Image.network(
-            imageUrl,
-            height: 100,
-            width: 100,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image.network(
+              imageUrl,
+              height: 120,
+              width: 120,
+              fit: BoxFit.cover,
+            ),
           ),
           SizedBox(width: 8.0),
           Expanded(

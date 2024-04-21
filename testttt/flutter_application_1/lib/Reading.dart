@@ -39,6 +39,12 @@ class _ReadingState extends State<Reading> {
               // สำหรับการเปิดหน้าตั้งค่า
             },
           ),
+          IconButton(
+            icon: Icon(Icons.book),
+            onPressed: () {
+              Navigator.pushNamed(context, '/reading');
+              },
+          ),
         ],
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(60.0),
